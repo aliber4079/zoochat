@@ -23,12 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
   	}
-  );
+  ).then( ()=> textArea.scrollTo(0,textArea.scrollHeight) );
   navigator.serviceWorker.addEventListener('message', (e) => {
    	textArea.value+=e.data + "\n";
 	textArea.scrollTo(0,textArea.scrollHeight);
   });
-  textArea.scrollTo(0,textArea.scrollHeight);
   const applicationServerKey =
     'BPyV6JJHqCBnp-P6BFICVAdOS_sn_qfBy0-Rh9ITBSbaI3FHWf2MhXDRtRsCOIUIzyYbJ7QEJs7UX3sbdAkrBPY';
   let isPushEnabled = false;
