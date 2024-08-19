@@ -6,7 +6,7 @@ use Minishlink\WebPush\Subscription;
 // here I'll get the subscription endpoint in the POST parameters
 // but in reality, you'll get this information in your database
 // because you already stored it (cf. push_subscription.php)
-$message= date('j-M H:i:s') . ": " . json_decode(file_get_contents('php://input'), true)["message"];
+$message= time() . "\t" . json_decode(file_get_contents('php://input'), true)["message"];
 if(!isset($message)){
  exit;
 }
@@ -47,7 +47,6 @@ foreach ($webPush->flush() as $report) {
 	 if ($report->isSubscriptionExpired() && isset($current_subs[$subscription["endpoint"]])) {
                 $offset=array_flip(array_keys($current_subs))[$endpoint];
                 array_splice($current_subs,$offset,1);
-error_log("after slice: " . print_r($current_subs,1));
 		file_put_contents($subsfile,var_export($current_subs,TRUE));
         }
         break;

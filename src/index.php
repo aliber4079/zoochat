@@ -9,6 +9,11 @@
 	flex-direction: column;
 	border: solid thin black;
 }
+#chatbox input,textarea {
+	font-size: 21px;
+	font-family: arial;
+}
+
 #recv_box {
 	
 	flex-grow: 1;
@@ -29,7 +34,7 @@ textarea {
 <body>
 	<div id="chatbox">
 		<div id="recv_box" >
-			<textarea readonly><?php system("tail -15 messages.txt");  ?></textarea>
+			<textarea></textarea> 
 		</div>
 		<div id="send_box" >
 			<input type="text">

@@ -8,11 +8,19 @@ self.addEventListener('push', function (event) {
         const title = "zoosmart";
 
         return self.registration.showNotification(title, {
-            body,
+		body: body,
+		icon: 'ele.jpg'
         });
     };
     if (event.data) {
+	let message=null, matches=null;
     	const payload = event.data.json();
+	matches=payload.message.split("\t");
+	if (matches) {
+		message=matches[1];
+	} else {
+		message=payload.message;
+	}
     	let sendNotif=true;
 	event.waitUntil(
 		clients.matchAll({
@@ -21,14 +29,14 @@ self.addEventListener('push', function (event) {
 		.then((clientList) => {
 			for (const client of clientList) {
 				if (new RegExp("^https://www.zoosmart.us").exec(client.url)) {
-					client.postMessage(payload.message);
+					client.postMessage(message);
 					if (client.visibilityState==="visible") {
 						sendNotif=false;
 					}
 				}
 			}
 	    	if (sendNotif) {
-			sendNotification(payload.message);
+			sendNotification(message);
 		}
 	})) //end event.waitUntil
      }// end if event.data
