@@ -41,7 +41,6 @@ foreach ($current_subs as $subscription) {
 
 foreach ($webPush->flush() as $report) {
     $endpoint = $report->getRequest()->getUri()->__toString();
-
     if (!$report->isSuccess()) {
          error_log("[x] Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
 	 if ($report->isSubscriptionExpired() && isset($current_subs[$subscription["endpoint"]])) {
@@ -49,6 +48,5 @@ foreach ($webPush->flush() as $report) {
                 array_splice($current_subs,$offset,1);
 		file_put_contents($subsfile,var_export($current_subs,TRUE));
         }
-        break;
     }
 }

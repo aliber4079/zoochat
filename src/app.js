@@ -1,31 +1,33 @@
+function formatMsg(msg) {
+	if(matches=/^([0-9]+)\t(.*)/.exec(msg)) {
+		let d = new Date(matches[1]*1000);
+		const formatter = new Intl.DateTimeFormat("en-us", {
+			  month: "numeric",
+			  day: "numeric",
+			  hour: "numeric",
+			  minute: "numeric",
+			  second: "numeric",
+			  hour12: false,
+		});
+		return formatter.formatToParts(d).map(p=>p.value).join('') + ": " + matches[2];
+	} else {
+		return msg;
+	}
+}
 document.addEventListener('DOMContentLoaded', () => {
   let textArea=document.querySelector('#recv_box>textarea');
   fetch('messages.php')
 	.then((data)=>data.text() )
 	.then((text)=>{
-		let lines=text.split(/[\r\n]+/);
+		let lines=text.trimEnd().split(/[\r\n]+/);
 		let matches;
 		for (line_num in lines) {
-			let line=lines[line_num];
-			if(matches=/^([0-9]+)\t(.*)/.exec(line)) {
-				let d = new Date(matches[1]*1000);
-				const formatter = new Intl.DateTimeFormat("en-us", {
-					  month: "numeric",
-					  day: "numeric",
-					  hour: "numeric",
-					  minute: "numeric",
-					  second: "numeric",
-					  hour12: false,
-				});
-				textArea.value+= formatter.formatToParts(d).map(p=>p.value).join('') + ": " + matches[2]+"\n";
-			} else {
-				textArea.value+=line+"\n";
-			}
+			textArea.value+=formatMsg(lines[line_num]) + "\n";
 		}
   	}
   ).then( ()=> textArea.scrollTo(0,textArea.scrollHeight) );
   navigator.serviceWorker.addEventListener('message', (e) => {
-   	textArea.value+=e.data + "\n";
+   	textArea.value+=formatMsg(e.data) + "\n";
 	textArea.scrollTo(0,textArea.scrollHeight);
   });
   const applicationServerKey =
