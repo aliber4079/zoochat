@@ -1,2 +1,2 @@
 <?php
-system("tail -35 messages.txt");
+system("tail -35 src/messages.txt");

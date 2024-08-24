@@ -39,6 +39,8 @@ if ($filePath && is_file($filePath)) {
         echo '404 Not Found';
     }
 } else {
+    // 404?
     // rewrite to our index file
-    include  'src' . DIRECTORY_SEPARATOR . 'index.html';
+    header("Location: /");
+    //include  'src' . DIRECTORY_SEPARATOR . 'index.html';
 }

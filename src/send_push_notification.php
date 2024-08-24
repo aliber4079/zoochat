@@ -30,7 +30,7 @@ if(file_exists($subsfile)) {
  exit;
 }
 
-file_put_contents("messages.txt",$message . "\n", FILE_APPEND);
+file_put_contents("src/messages.txt",$message . "\n", FILE_APPEND);
 // send multiple notifications with payload
 foreach ($current_subs as $subscription) {
     $webPush->queueNotification(

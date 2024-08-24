@@ -7,7 +7,8 @@ self.addEventListener('push', function (event) {
 		const title = "zoosmart";
 		return self.registration.showNotification(title, {
 			body: body,
-			icon: 'ele.jpg'
+			icon: 'ele.jpg',
+			tag: 'applet'
 		});
 	};
 	if (event.data) {

@@ -9,7 +9,7 @@
 	flex-direction: column;
 	border: solid thin black;
 }
-#chatbox input,textarea {
+#chatbox input,#textarea {
 	font-size: 21px;
 	font-family: arial;
 }
@@ -17,6 +17,7 @@
 #recv_box {
 	
 	flex-grow: 1;
+	overflow: auto;
 }
 #send_box {
 	display:flex;
@@ -24,17 +25,20 @@
 #send_box input {
 	flex-grow: 1;
 }
-textarea {
+#textarea {
 	width: 100%;
 	height: 100%;
 	resize: none;
+}
+#textarea>div:nth-child(odd) {
+	background-color: lightgrey;
 }
 </style>
 </head>
 <body>
 	<div id="chatbox">
 		<div id="recv_box" >
-			<textarea></textarea> 
+			<div id="textarea"></div> 
 		</div>
 		<div id="send_box" >
 			<input type="text">

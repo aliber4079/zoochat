@@ -15,20 +15,21 @@ function formatMsg(msg) {
 	}
 }
 document.addEventListener('DOMContentLoaded', () => {
-  let textArea=document.querySelector('#recv_box>textarea');
+  let textArea=document.querySelector('#textarea');
+  let recvBox=document.querySelector('#recv_box');
   fetch('messages.php')
 	.then((data)=>data.text() )
 	.then((text)=>{
 		let lines=text.trimEnd().split(/[\r\n]+/);
 		let matches;
 		for (line_num in lines) {
-			textArea.value+=formatMsg(lines[line_num]) + "\n";
+			textArea.innerHTML+="<div>" + formatMsg(lines[line_num]) + "<div>\n";
 		}
   	}
-  ).then( ()=> textArea.scrollTo(0,textArea.scrollHeight) );
+  ).then( ()=> recvBox.scrollTo(0,recvBox.scrollHeight) );
   navigator.serviceWorker.addEventListener('message', (e) => {
-   	textArea.value+=formatMsg(e.data) + "\n";
-	textArea.scrollTo(0,textArea.scrollHeight);
+   	textArea.innerHTML+="<div>" + formatMsg(e.data) + "<div>\n";
+	recvBox.scrollTo(0,recvBox.scrollHeight);
   });
   const applicationServerKey =
     'BPyV6JJHqCBnp-P6BFICVAdOS_sn_qfBy0-Rh9ITBSbaI3FHWf2MhXDRtRsCOIUIzyYbJ7QEJs7UX3sbdAkrBPY';
