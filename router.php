@@ -30,7 +30,9 @@ if ($filePath && is_file($filePath)) {
         } else {
             if (strtolower(substr($filePath, -3)) === '.js') {
                 header('Content-Type: text/javascript');
-            }
+            } elseif (strtolower(substr($filePath, -4)) === '.jpg') {
+                header('Content-Type: image/jpeg');
+	    }
             readfile ($filePath);
         }
     } else {

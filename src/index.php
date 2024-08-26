@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name='robots' content='noindex,nofollow' />
 <style>
 #chatbox {
 	width: 500px;
