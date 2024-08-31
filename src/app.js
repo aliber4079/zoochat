@@ -14,6 +14,20 @@ function formatMsg(msg) {
 		return msg;
 	}
 }
+document.addEventListener("visibilitychange", (event) => {
+	if (!document.hidden) {
+		navigator.serviceWorker.getRegistration()
+		.then(r=>{
+			r.getNotifications()
+			.then(notifs=>{
+				notifs.forEach(notif=>{
+					notif.close();
+				})
+			});
+		})
+	}
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   let textArea=document.querySelector('#textarea');
   let recvBox=document.querySelector('#recv_box');
@@ -230,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		return;
 	}
         const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
-        const jsonSubscription = subscription.toJSON();
         fetch('send_push_notification.php', {
           method: 'POST',
           body: JSON.stringify({"message": document.querySelector('input[type=text]').value})

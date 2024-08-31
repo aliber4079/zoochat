@@ -1,3 +1,14 @@
+self.onnotificationclick = (event) => {
+  event.preventDefault();
+  var notification = event.notification;
+  var reply = event.reply;
+  event.notification.close();
+  fetch('send_push_notification.php', {
+          method: 'POST',
+          body: JSON.stringify({"message": reply})
+  })
+}
+
 self.addEventListener('push', function (event) {
 	if (!(self.Notification && self.Notification.permission === 'granted')) {
 		return;
@@ -8,7 +19,13 @@ self.addEventListener('push', function (event) {
 		return self.registration.showNotification(title, {
 			body: body,
 			icon: 'ele.jpg',
-			tag: 'applet'
+			tag: 'applet',
+			renotify: true,
+			actions: [{
+				action: "reply",
+				type: "text",
+				title: "reply"
+			}]
 		});
 	};
 	if (event.data) {
