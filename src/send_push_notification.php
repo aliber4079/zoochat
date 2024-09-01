@@ -6,10 +6,11 @@ use Minishlink\WebPush\Subscription;
 // here I'll get the subscription endpoint in the POST parameters
 // but in reality, you'll get this information in your database
 // because you already stored it (cf. push_subscription.php)
-$message= time() . "\t" . json_decode(file_get_contents('php://input'), true)["message"];
-if(!isset($message)){
+$payload=json_decode(file_get_contents('php://input'), true);
+if(!isset($payload["message"])){
  exit;
 }
+$message= time() . "\t" . $payload["message"];
 
 $auth = array(
     'VAPID' => array(
@@ -32,11 +33,12 @@ if(file_exists($subsfile)) {
 
 file_put_contents("src/messages.txt",$message . "\n", FILE_APPEND);
 // send multiple notifications with payload
+$outbound_payload=["message"=>$message];
+if (isset($payload["endpoint"])) {
+	$outbound_payload["endpoint"]=$payload["endpoint"];
+}
 foreach ($current_subs as $subscription) {
-    $webPush->queueNotification(
-        Subscription::create($subscription),
-        json_encode(["message"=>$message])
-    );
+    $webPush->queueNotification(Subscription::create($subscription),json_encode($outbound_payload));
 } 
 
 foreach ($webPush->flush() as $report) {

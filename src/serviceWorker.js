@@ -2,10 +2,13 @@ self.onnotificationclick = (event) => {
   event.preventDefault();
   var notification = event.notification;
   var reply = event.reply;
-  event.notification.close();
-  fetch('send_push_notification.php', {
+  registration.pushManager.getSubscription()
+  .then(subscription => {
+  	fetch('send_push_notification.php', {
           method: 'POST',
-          body: JSON.stringify({"message": reply})
+          body: JSON.stringify({"message": reply, "endpoint":subscription.endpoint})
+	})
+	 .finally(()=>event.notification.close());
   })
 }
 
@@ -37,10 +40,12 @@ self.addEventListener('push', function (event) {
 				type: "window",
 			})
 			.then((clientList) => {
+				registration.pushManager.getSubscription()
+				.then(subscription=>{
 				for (const client of clientList) {
 					if (new RegExp("^https://www.zoosmart.us").exec(client.url)) {
 						client.postMessage(payload.message);
-						if (client.visibilityState==="visible") {
+						if (client.visibilityState==="visible" || (payload.endpoint && payload.endpoint===subscription.endpoint) ) {
 							sendNotif=false;
 						}
 					}
@@ -48,7 +53,8 @@ self.addEventListener('push', function (event) {
 				if (sendNotif) {
 					sendNotification(payload.message.substr(payload.message.indexOf('\t')+1));
 				}
-			}) //end then
+			}) //end then subscription
+			}) //end then clientlist
 		) //end event.waitUntil
 	}// end if event.data
 });

@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0];
         fetch('send_push_notification.php', {
           method: 'POST',
-          body: JSON.stringify({"message": document.querySelector('input[type=text]').value})
+          body: JSON.stringify({"message": document.querySelector('input[type=text]').value, endpoint: subscription.endpoint})
 	}).then( () => document.querySelector('input[type=text]').value='' );
       })
   );
